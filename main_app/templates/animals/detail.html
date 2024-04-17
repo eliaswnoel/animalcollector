@@ -42,6 +42,56 @@
       </tbody>
     </table>
   </div>
+  <hr>
+  <div class="row">
+    <div class="col s6">
+      <h3>{{ animal.name }}'s Foods</h3>
+      {% if animal.foods.count %}
+      {% for food in animal.foods.all %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            A {{ food.name }}
+          </span>
+        </div>
+        <div class="card-action">
+          <form action="{% url 'remove_food' animal.id food.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="waves-effect waves-light btn-small">REMOVE
+              <i class="material-icons right">delete</i>
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <h5>No Foods Yet</h5>
+      {% endif %}
+    </div>
+    <div class="col s6">
+      <h3>Available Foods</h3>
+      {% if foods.count %}
+      {% for food in foods.all %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            A {{ food.name }}
+          </span>
+        </div>
+        <div class="card-action">
+          <form action="{% url 'assoc_food' c.id food.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn">Add<i class="material-icons right">add</i></button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <h5>{{animal.name}} Already Has All Food Available</h5>
+      {% endif %}
+    </div>
+  </div>
+
   <!-- New Markup Above -->
 </div>
 <script>

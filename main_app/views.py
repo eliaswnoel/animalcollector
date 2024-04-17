@@ -1,11 +1,21 @@
 from django.shortcuts import render, redirect
 from .forms import FeedingForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Animal
+from django.views.generic import ListView, DetailView
+from .models import Animal, Food
 
 
 
 # Create your views here
+
+def assoc_food(request, animal_id, food_id):
+  # Note that you can pass a toy's id instead of the whole toy object
+  Animal.objects.get(id=animal_id).toys.add(food_id)
+  return redirect('detail', animal_id=animal_id)
+
+def remove_food(request, animal_id, food_id):
+  Animal.objects.get(id=animal_id).toys.remove(food_id)
+  return redirect('detail', animal_id=animal_id)
 
 def add_feeding(request, animal_id):
   # create a ModelForm instance using the data in request.POST
@@ -42,7 +52,7 @@ def animals_detail(request, animal_id):
 
 class AnimalCreate(CreateView):
     model = Animal
-    fields = '__all__'
+    fields = '__all__' 
    #  success_url = '/animals/{animal_id}' 
 
 class AnimalUpdate(UpdateView):
@@ -55,3 +65,20 @@ class AnimalDelete(DeleteView):
   success_url = '/animals'
 
 
+class FoodList(ListView):
+  model = Food
+
+class FoodDetail(DetailView):
+  model = Food
+
+class FoodCreate(CreateView):
+  model = Food
+  fields = '__all__'
+
+class FoodUpdate(UpdateView):
+  model = Food
+  fields = ['name']
+
+class FoodDelete(DeleteView):
+  model = Food
+  success_url = '/foods'
